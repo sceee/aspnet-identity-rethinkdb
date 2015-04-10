@@ -1,4 +1,4 @@
-﻿namespace AspNet.Identity.MongoDB
+﻿namespace AspNet.Identity.RethinkDB
 {
 	using global::MongoDB.Bson;
 	using global::MongoDB.Bson.Serialization.Attributes;

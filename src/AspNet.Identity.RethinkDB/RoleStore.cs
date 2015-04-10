@@ -1,4 +1,4 @@
-﻿namespace AspNet.Identity.MongoDB
+﻿namespace AspNet.Identity.RethinkDB
 {
 	using System.Linq;
 	using System.Threading.Tasks;
