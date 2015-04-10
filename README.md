@@ -1,7 +1,9 @@
 AspNet.Identity.Mongo
 =====================
 
-A mongodb provider for the new ASP.NET Identity framework. My aim is to ensure this project is well tested and configurable.
+Code is based on the mongodb provider for Asp.Net Identity Framework by g0t4 ( https://github.com/g0t4/aspnet-identity-mongo ). Thanks for his code.
+
+A rethinkdb provider for the ASP.NET Identity framework. My aim is to ensure this project is well tested and configurable.
 
 ## Usage
 
