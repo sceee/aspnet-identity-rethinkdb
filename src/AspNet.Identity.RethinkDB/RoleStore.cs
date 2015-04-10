@@ -1,11 +1,13 @@
 ﻿namespace AspNet.Identity.RethinkDB
 {
+	using System;
 	using System.Linq;
 	using System.Threading.Tasks;
-	using global::MongoDB.Bson;
-	using global::MongoDB.Driver.Builders;
-	using global::MongoDB.Driver.Linq;
+	//using global::MongoDB.Bson;
+	//using global::MongoDB.Driver.Builders;
+	//using global::MongoDB.Driver.Linq;
 	using Microsoft.AspNet.Identity;
+	using global::RethinkDb;
 
 	/// <summary>
 	///     Note: Deleting and updating do not modify the roles stored on a user document. If you desire this dynamic
@@ -17,15 +19,19 @@
 		where TRole : IdentityRole
 	{
 		private readonly IdentityContext _Context;
+		private readonly ITableQuery<TRole> TableRoles;
 
 		public RoleStore(IdentityContext context)
 		{
 			_Context = context;
+			TableRoles = _Context.DB.Table<TRole>("IdentityRoles");
 		}
 
 		public virtual IQueryable<TRole> Roles
 		{
-			get { return _Context.Roles.AsQueryable<TRole>(); }
+			// TODO: Performance?!
+			get
+			{ return _Context.Connection.Run(TableRoles).AsQueryable<TRole>(); }
 		}
 
 		public virtual void Dispose()
@@ -35,29 +41,28 @@
 
 		public virtual Task CreateAsync(TRole role)
 		{
-			return Task.Run(() => _Context.Roles.Insert(role));
+			return Task.Run(() => _Context.Connection.Run(TableRoles.Insert(role)));
 		}
 
 		public virtual Task UpdateAsync(TRole role)
 		{
-			return Task.Run(() => _Context.Roles.Save(role));
+			return Task.Run(() => _Context.Connection.Run(TableRoles.Insert(role, Conflict.Replace)));
 		}
 
 		public virtual Task DeleteAsync(TRole role)
 		{
-			var queryById = Query<TRole>.EQ(r => r.Id, role.Id);
-			return Task.Run(() => _Context.Roles.Remove(queryById));
+			return Task.Run(() => _Context.Connection.Run(TableRoles.Select(r => r.Id == role.Id).Delete()));
 		}
 
 		public virtual Task<TRole> FindByIdAsync(string roleId)
 		{
-			return Task.Run(() => _Context.Roles.FindOneByIdAs<TRole>(ObjectId.Parse(roleId)));
+			return Task.Run(() => _Context.Connection.Run(TableRoles.Filter(r => r.Id == roleId)).FirstOrDefault()); // FindOneByIdAs<TRole>(ObjectId.Parse(roleId)));
 		}
 
 		public virtual Task<TRole> FindByNameAsync(string roleName)
 		{
-			var queryByName = Query<TRole>.EQ(r => r.Name, roleName);
-			return Task.Run(() => _Context.Roles.FindOneAs<TRole>(queryByName));
+			//var queryByName = Query.Filter<TRole>(r,  Query<TRole>.EQ(r => r.Name, roleName);
+			return Task.Run(() => _Context.Connection.Run(TableRoles.Filter<TRole>(r => r.Name == roleName)).FirstOrDefault());
 		}
 	}
 }

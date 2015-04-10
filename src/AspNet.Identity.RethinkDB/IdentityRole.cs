@@ -1,14 +1,13 @@
 ﻿namespace AspNet.Identity.RethinkDB
 {
-	using global::MongoDB.Bson;
-	using global::MongoDB.Bson.Serialization.Attributes;
+	using System;
 	using Microsoft.AspNet.Identity;
 
 	public class IdentityRole : IRole<string>
 	{
 		public IdentityRole()
 		{
-			Id = ObjectId.GenerateNewId().ToString();
+			Id = Guid.NewGuid().ToString("N");
 		}
 
 		public IdentityRole(string roleName) : this()
@@ -16,7 +15,6 @@
 			Name = roleName;
 		}
 
-		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; private set; }
 
 		public string Name { get; set; }

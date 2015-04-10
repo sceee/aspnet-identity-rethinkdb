@@ -5,10 +5,11 @@
 	using System.Linq;
 	using System.Security.Claims;
 	using System.Threading.Tasks;
-	using global::MongoDB.Bson;
-	using global::MongoDB.Driver.Builders;
-	using global::MongoDB.Driver.Linq;
+	//using global::MongoDB.Bson;
+	//using global::MongoDB.Driver.Builders;
+	//using global::MongoDB.Driver.Linq;
 	using Microsoft.AspNet.Identity;
+	using global::RethinkDb;
 
 	public class UserStore<TUser> : IUserStore<TUser>,
 		IUserPasswordStore<TUser>,
@@ -24,10 +25,12 @@
 		where TUser : IdentityUser
 	{
 		private readonly IdentityContext _Context;
+		private readonly ITableQuery<TUser> TableUsers;
 
 		public UserStore(IdentityContext context)
 		{
 			_Context = context;
+			TableUsers = _Context.DB.Table<TUser>("IdentityUsers");
 		}
 
 		public virtual void Dispose()
@@ -37,31 +40,29 @@
 
 		public virtual Task CreateAsync(TUser user)
 		{
-			return Task.Run(() => _Context.Users.Insert(user));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Insert(user)));
 		}
 
 		public virtual Task UpdateAsync(TUser user)
 		{
 			// todo should add an optimistic concurrency check
-			return Task.Run(() => _Context.Users.Save(user));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Insert(user, Conflict.Replace)));
 		}
 
 		public virtual Task DeleteAsync(TUser user)
 		{
-			var queryById = Query<TUser>.EQ(u => u.Id, user.Id);
-			return Task.Run(() => _Context.Users.Remove(queryById));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Select(u => u.Id == user.Id).Delete()));
 		}
 
 		public virtual Task<TUser> FindByIdAsync(string userId)
 		{
-			return Task.Run(() => _Context.Users.FindOneByIdAs<TUser>(ObjectId.Parse(userId)));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.Id == userId)).FirstOrDefault());
 		}
 
 		public virtual Task<TUser> FindByNameAsync(string userName)
 		{
 			// todo exception on duplicates? or better to enforce unique index to ensure this
-			var queryByName = Query<TUser>.EQ(u => u.UserName, userName);
-			return Task.Run(() => _Context.Users.FindOneAs<TUser>(queryByName));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.UserName == userName)).FirstOrDefault());
 		}
 
 		public virtual Task SetPasswordHashAsync(TUser user, string passwordHash)
@@ -121,10 +122,7 @@
 
 		public virtual Task<TUser> FindAsync(UserLoginInfo login)
 		{
-			return Task.Factory
-				.StartNew(() => _Context.Users.AsQueryable<TUser>()
-					.FirstOrDefault(u => u.Logins
-						.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)));
+			return Task.Factory.StartNew(() => Users.FirstOrDefault(u => u.Logins.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)));
 		}
 
 		public virtual Task SetSecurityStampAsync(TUser user, string stamp)
@@ -163,7 +161,7 @@
 		public virtual Task<TUser> FindByEmailAsync(string email)
 		{
 			// todo what if a user can have multiple accounts with the same email?
-			return Task.Run(() => _Context.Users.AsQueryable<TUser>().FirstOrDefault(u => u.Email == email));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.Email == email)).FirstOrDefault());
 		}
 
 		public virtual Task<IList<Claim>> GetClaimsAsync(TUser user)
@@ -185,7 +183,8 @@
 
 		public virtual IQueryable<TUser> Users
 		{
-			get { return _Context.Users.AsQueryable<TUser>(); }
+			// TODO: Performance?!
+			get { return _Context.Connection.Run(TableUsers).AsQueryable<TUser>(); }
 		}
 
 		public virtual Task SetPhoneNumberAsync(TUser user, string phoneNumber)

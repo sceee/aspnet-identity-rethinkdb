@@ -1,29 +1,34 @@
 ﻿namespace AspNet.Identity.RethinkDB
 {
-	using global::MongoDB.Driver;
-	using global::MongoDB.Driver.Builders;
+	using System;
+	//using global::MongoDB.Driver;
+	//using global::MongoDB.Driver.Builders;
+	using global::RethinkDb;
 
 	public class IndexChecks
 	{
-		public static void EnsureUniqueIndexOnUserName(MongoCollection users)
+		public static void EnsureUniqueIndexOnUserName(ITableQuery<IdentityUser> users)
 		{
-			var userName = new IndexKeysBuilder<IdentityUser>().Ascending(t => t.UserName);
-			var unique = new IndexOptionsBuilder().SetUnique(true);
-			users.CreateIndex(userName, unique);
+			throw new NotImplementedException();
+			//var userName = new IndexKeysBuilder<IdentityUser>().Ascending(t => t.UserName);
+			//var unique = new IndexOptionsBuilder().SetUnique(true);
+			//users.CreateIndex(userName, unique);
 		}
 
-		public static void EnsureUniqueIndexOnRoleName(MongoCollection roles)
+		public static void EnsureUniqueIndexOnRoleName(ITableQuery<IdentityRole> roles)
 		{
-			var roleName = new IndexKeysBuilder<IdentityRole>().Ascending(t => t.Name);
-			var unique = new IndexOptionsBuilder().SetUnique(true);
-			roles.CreateIndex(roleName, unique);
+			throw new NotImplementedException();
+			//var roleName = new IndexKeysBuilder<IdentityRole>().Ascending(t => t.Name);
+			//var unique = new IndexOptionsBuilder().SetUnique(true);
+			//roles.CreateIndex(roleName, unique);
 		}
 
-		public static void EnsureUniqueIndexOnEmail(MongoCollection users)
+		public static void EnsureUniqueIndexOnEmail(ITableQuery<IdentityUser> users)
 		{
-			var email = new IndexKeysBuilder<IdentityUser>().Ascending(t => t.Email);
-			var unique = new IndexOptionsBuilder().SetUnique(true);
-			users.CreateIndex(email, unique);
+			throw new NotImplementedException();
+			//var email = new IndexKeysBuilder<IdentityUser>().Ascending(t => t.Email);
+			//var unique = new IndexOptionsBuilder().SetUnique(true);
+			//users.CreateIndex(email, unique);
 		}
 	}
 }

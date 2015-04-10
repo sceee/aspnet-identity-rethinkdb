@@ -4,21 +4,18 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security.Claims;
-	using global::MongoDB.Bson;
-	using global::MongoDB.Bson.Serialization.Attributes;
 	using Microsoft.AspNet.Identity;
 
 	public class IdentityUser : IUser<string>
 	{
 		public IdentityUser()
 		{
-			Id = ObjectId.GenerateNewId().ToString();
+			Id = Guid.NewGuid().ToString("N");
 			Roles = new List<string>();
 			Logins = new List<UserLoginInfo>();
 			Claims = new List<IdentityUserClaim>();
 		}
 
-		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; private set; }
 
 		public string UserName { get; set; }
@@ -41,7 +38,6 @@
 
 		public virtual int AccessFailedCount { get; set; }
 
-		[BsonIgnoreIfNull]
 		public List<string> Roles { get; set; }
 
 		public virtual void AddRole(string role)
@@ -54,10 +50,8 @@
 			Roles.Remove(role);
 		}
 
-		[BsonIgnoreIfNull]
 		public virtual string PasswordHash { get; set; }
 
-		[BsonIgnoreIfNull]
 		public List<UserLoginInfo> Logins { get; set; }
 
 		public virtual void AddLogin(UserLoginInfo login)
@@ -79,7 +73,6 @@
 			return false;
 		}
 
-		[BsonIgnoreIfNull]
 		public List<IdentityUserClaim> Claims { get; set; }
 
 		public virtual void AddClaim(Claim claim)
