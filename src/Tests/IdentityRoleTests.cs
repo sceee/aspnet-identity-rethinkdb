@@ -1,22 +1,22 @@
 ﻿namespace Tests
 {
+	using System;
 	using AspNet.Identity.RethinkDB;
-	using MongoDB.Bson;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class IdentityRoleTests : AssertionHelper
 	{
-		[Test]
-		public void ToBsonDocument_IdAssigned_MapsToBsonObjectId()
-		{
-			var role = new IdentityRole();
-			role.SetId(ObjectId.GenerateNewId().ToString());
+		//[Test]
+		//public void ToBsonDocument_IdAssigned_MapsToBsonObjectId()
+		//{
+		//	var role = new IdentityRole();
+		//	role.SetId(ObjectId.GenerateNewId().ToString());
 
-			var document = role.ToBsonDocument();
+		//	var document = role.ToBsonDocument();
 
-			Expect(document["_id"], Is.TypeOf<BsonObjectId>());
-		}
+		//	Expect(document["_id"], Is.TypeOf<BsonObjectId>());
+		//}
 
 		[Test]
 		public void Create_WithoutRoleName_HasIdAssigned()
@@ -25,7 +25,7 @@
 
 			var parsed = role.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Expect(parsed, Is.Not.EqualTo(Guid.Empty));
 		}
 
 		[Test]
@@ -45,7 +45,7 @@
 
 			var parsed = role.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Expect(parsed, Is.Not.EqualTo(Guid.Empty));
 		}
 	}
 }

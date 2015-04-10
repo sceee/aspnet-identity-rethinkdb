@@ -2,22 +2,21 @@
 {
 	using System;
 	using AspNet.Identity.RethinkDB;
-	using MongoDB.Bson;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class IdentityUserTests : AssertionHelper
 	{
-		[Test]
-		public void ToBsonDocument_IdAssigned_MapsToBsonObjectId()
-		{
-			var user = new IdentityUser();
-			user.SetId(ObjectId.GenerateNewId().ToString());
+		//[Test]
+		//public void ToBsonDocument_IdAssigned_MapsToBsonObjectId()
+		//{
+		//	var user = new IdentityUser();
+		//	user.SetId(Guid.NewGuid().ToString());
 
-			var document = user.ToBsonDocument();
+		//	var document = user.ToBsonDocument();
 
-			Expect(document["_id"], Is.TypeOf<BsonObjectId>());
-		}
+		//	Expect(document["_id"], Is.TypeOf<BsonObjectId>());
+		//}
 
 		[Test]
 		public void Create_NewIdentityUser_HasIdAssigned()
@@ -26,20 +25,20 @@
 
 			var parsed = user.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Expect(parsed, Is.Not.EqualTo(Guid.Empty));
 		}
 
-		[Test]
-		public void Create_NoPassword_DoesNotSerializePasswordField()
-		{
-			// if a particular consuming application doesn't intend to use passwords, there's no reason to store a null entry except for padding concerns, if that is the case then the consumer may want to create a custom class map to serialize as desired.
+		//[Test]
+		//public void Create_NoPassword_DoesNotSerializePasswordField()
+		//{
+		//	// if a particular consuming application doesn't intend to use passwords, there's no reason to store a null entry except for padding concerns, if that is the case then the consumer may want to create a custom class map to serialize as desired.
 
-			var user = new IdentityUser();
+		//	var user = new IdentityUser();
 
-			var document = user.ToBsonDocument();
+		//	var document = user.ToBsonDocument();
 
-			Expect(document.Contains("PasswordHash"), Is.False);
-		}
+		//	Expect(document.Contains("PasswordHash"), Is.False);
+		//}
 
 		[Test]
 		public void Create_NewIdentityUser_RolesNotNull()
@@ -49,17 +48,17 @@
 			Expect(user.Roles, Is.Not.Null);
 		}
 
-		[Test]
-		public void Create_NullRoles_DoesNotSerializeRoles()
-		{
-			// serialized nulls can cause havoc in deserialization, overwriting the constructor's initial empty list 
-			var user = new IdentityUser();
-			user.Roles = null;
+		//[Test]
+		//public void Create_NullRoles_DoesNotSerializeRoles()
+		//{
+		//	// serialized nulls can cause havoc in deserialization, overwriting the constructor's initial empty list 
+		//	var user = new IdentityUser();
+		//	user.Roles = null;
 
-			var document = user.ToBsonDocument();
+		//	var document = user.ToBsonDocument();
 
-			Expect(document.Contains("Roles"), Is.False);
-		}
+		//	Expect(document.Contains("Roles"), Is.False);
+		//}
 
 		// todo consider if we want to not serialize the empty Roles array, also empty Logins array
 
@@ -71,17 +70,17 @@
 			Expect(user.Logins, Is.Not.Null);
 		}
 
-		[Test]
-		public void Create_NullLogins_DoesNotSerializeLogins()
-		{
-			// serialized nulls can cause havoc in deserialization, overwriting the constructor's initial empty list 
-			var user = new IdentityUser();
-			user.Logins = null;
+		//[Test]
+		//public void Create_NullLogins_DoesNotSerializeLogins()
+		//{
+		//	// serialized nulls can cause havoc in deserialization, overwriting the constructor's initial empty list 
+		//	var user = new IdentityUser();
+		//	user.Logins = null;
 
-			var document = user.ToBsonDocument();
+		//	var document = user.ToBsonDocument();
 
-			Expect(document.Contains("Logins"), Is.False);
-		}
+		//	Expect(document.Contains("Logins"), Is.False);
+		//}
 
 		[Test]
 		public void Create_NewIdentityUser_ClaimsNotNull()
@@ -91,16 +90,16 @@
 			Expect(user.Claims, Is.Not.Null);
 		}
 
-		[Test]
-		public void Create_NullClaims_DoesNotSerializeClaims()
-		{
-			// serialized nulls can cause havoc in deserialization, overwriting the constructor's initial empty list 
-			var user = new IdentityUser();
-			user.Claims = null;
+		//[Test]
+		//public void Create_NullClaims_DoesNotSerializeClaims()
+		//{
+		//	// serialized nulls can cause havoc in deserialization, overwriting the constructor's initial empty list 
+		//	var user = new IdentityUser();
+		//	user.Claims = null;
 
-			var document = user.ToBsonDocument();
+		//	var document = user.ToBsonDocument();
 
-			Expect(document.Contains("Claims"), Is.False);
-		}
+		//	Expect(document.Contains("Claims"), Is.False);
+		//}
 	}
 }
