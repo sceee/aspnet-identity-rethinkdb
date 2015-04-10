@@ -1,11 +1,12 @@
 ﻿namespace IntegrationTests
 {
+	using System;
 	using System.Linq;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
-	using MongoDB.Bson;
 	using NUnit.Framework;
 	using Tests;
+	using RethinkDb;
 
 	[TestFixture]
 	public class RoleStoreTests : UserIntegrationTestsBase
@@ -19,7 +20,7 @@
 
 			manager.Create(role);
 
-			var savedRole = Roles.FindAll().Single();
+			var savedRole = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityRole>("IdentityRoles")).FirstOrDefault();
 			Expect(savedRole.Name, Is.EqualTo(roleName));
 		}
 
@@ -40,7 +41,7 @@
 		[Test]
 		public void FindById_SavedRole_ReturnsRole()
 		{
-			var roleId = ObjectId.GenerateNewId().ToString();
+			var roleId = Guid.NewGuid().ToString();
 			var role = new IdentityRole {Name = "name"};
 			role.SetId(roleId);
 			var manager = GetRoleManager();
@@ -58,11 +59,11 @@
 			var role = new IdentityRole {Name = "name"};
 			var manager = GetRoleManager();
 			manager.Create(role);
-			Expect(Roles.FindAll(), Is.Not.Empty);
+			Expect(DatabaseConnection.Run(IdentityContext.DB.Table<IdentityRole>("IdentityRoles")), Is.Not.Empty);
 
 			manager.Delete(role);
 
-			Expect(Roles.FindAll(), Is.Empty);
+			Expect(DatabaseConnection.Run(IdentityContext.DB.Table<IdentityRole>("IdentityRoles")), Is.Empty);
 		}
 
 		[Test]
@@ -76,7 +77,7 @@
 
 			manager.Update(savedRole);
 
-			var changedRole = Roles.FindAll().Single();
+			var changedRole = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityRole>("IdentityRoles")).FirstOrDefault();
 			Expect(changedRole, Is.Not.Null);
 			Expect(changedRole.Name, Is.EqualTo("newname"));
 		}

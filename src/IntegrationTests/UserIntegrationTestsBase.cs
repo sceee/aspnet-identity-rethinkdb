@@ -1,28 +1,28 @@
 ﻿namespace IntegrationTests
 {
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
-	using MongoDB.Driver;
 	using NUnit.Framework;
+	using RethinkDb;
+	using RethinkDb.Configuration;
 
 	public class UserIntegrationTestsBase : AssertionHelper
 	{
-		protected MongoDatabase Database;
-		protected MongoCollection<IdentityUser> Users;
-		protected MongoCollection<IdentityRole> Roles;
+		private static IConnectionFactory connectionFactory = ConfigurationAssembler.CreateConnectionFactory("testcluster");
 		protected IdentityContext IdentityContext;
+		protected IConnection DatabaseConnection;
+		protected IDatabaseQuery DB;
 
 		[SetUp]
 		public void BeforeEachTest()
 		{
-			var client = new MongoClient("mongodb://localhost:27017");
-			Database = client.GetServer().GetDatabase("identity-testing");
-			Users = Database.GetCollection<IdentityUser>("users");
-			Roles = Database.GetCollection<IdentityRole>("roles");
-			IdentityContext = new IdentityContext(Users, Roles);
+			DatabaseConnection = connectionFactory.Get();
+			DB = Query.Db("UnittestDB");
+			IdentityContext = new IdentityContext(DatabaseConnection, DB);
 
-			Database.DropCollection("users");
-			Database.DropCollection("roles");
+			// Cleanup
+			DatabaseConnection.Run(DB.TableDrop("IdentityUsers"));
+			DatabaseConnection.Run(DB.TableDrop("IdentityRoles"));
 		}
 
 		protected UserManager<IdentityUser> GetUserManager()

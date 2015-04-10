@@ -1,7 +1,7 @@
 ﻿namespace Tests
 {
 	using System;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using MongoDB.Bson;
 	using NUnit.Framework;
 
@@ -24,7 +24,7 @@
 		{
 			var user = new IdentityUser();
 
-			var parsed = user.Id.SafeParseObjectId();
+			var parsed = user.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
 			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
 		}

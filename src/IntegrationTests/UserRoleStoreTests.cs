@@ -1,9 +1,10 @@
 ﻿namespace IntegrationTests
 {
 	using System.Linq;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
 	using NUnit.Framework;
+	using RethinkDb;
 
 	[TestFixture]
 	public class UserRoleStoreTests : UserIntegrationTestsBase
@@ -29,7 +30,7 @@
 
 			manager.AddToRole(user.Id, "role");
 
-			var savedUser = Users.FindAll().Single();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUser")).FirstOrDefault();
 			Expect(savedUser.Roles, Is.EquivalentTo(new[] {"role"}));
 			Expect(manager.IsInRole(user.Id, "role"), Is.True);
 		}
@@ -44,7 +45,7 @@
 
 			manager.RemoveFromRole(user.Id, "role");
 
-			var savedUser = Users.FindAll().Single();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUser")).FirstOrDefault();
 			Expect(savedUser.Roles, Is.Empty);
 			Expect(manager.IsInRole(user.Id, "role"), Is.False);
 		}

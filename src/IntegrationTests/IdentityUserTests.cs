@@ -1,9 +1,10 @@
 ﻿namespace IntegrationTests
 {
-	using AspNet.Identity.MongoDB;
-	using MongoDB.Bson;
+	using System;
+	using AspNet.Identity.RethinkDB;
 	using NUnit.Framework;
 	using Tests;
+	using RethinkDb;
 
 	[TestFixture]
 	public class IdentityUserTests : UserIntegrationTestsBase
@@ -14,12 +15,13 @@
 			var user = new IdentityUser();
 			user.SetId(null);
 
-			Users.Insert(user);
+			DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers").Insert(user));
+			//Users.Insert(user);
 
 			Expect(user.Id, Is.Not.Null);
-			var parsed = user.Id.SafeParseObjectId();
+			var parsed = user.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Expect(parsed, Is.Not.EqualTo(Guid.Empty));
 		}
 	}
 }

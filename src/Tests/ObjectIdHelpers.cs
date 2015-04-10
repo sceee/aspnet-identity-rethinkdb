@@ -1,13 +1,12 @@
-﻿namespace Tests
+﻿using System;
+namespace Tests
 {
-	using MongoDB.Bson;
-
 	public static class ObjectIdHelpers
 	{
-		public static ObjectId? SafeParseObjectId(this string id)
+		public static Guid? SafeParseGuid(this string id)
 		{
-			ObjectId parsed;
-			if (ObjectId.TryParse(id, out parsed))
+			Guid parsed;
+			if (Guid.TryParse(id, out parsed))
 			{
 				return parsed;
 			}

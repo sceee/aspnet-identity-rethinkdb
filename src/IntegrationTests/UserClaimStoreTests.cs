@@ -2,7 +2,7 @@
 {
 	using System.Linq;
 	using System.Security.Claims;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
 	using NUnit.Framework;
 

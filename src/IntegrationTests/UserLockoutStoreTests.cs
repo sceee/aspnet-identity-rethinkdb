@@ -1,7 +1,7 @@
 ﻿namespace IntegrationTests
 {
 	using System;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
 	using NUnit.Framework;
 

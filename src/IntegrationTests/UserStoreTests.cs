@@ -1,11 +1,12 @@
 ﻿namespace IntegrationTests
 {
 	using System.Linq;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
-	using MongoDB.Bson;
 	using NUnit.Framework;
 	using Tests;
+	using RethinkDb;
+	using System;
 
 	[TestFixture]
 	public class UserStoreTests : UserIntegrationTestsBase
@@ -19,7 +20,7 @@
 
 			manager.Create(user);
 
-			var savedUser = Users.FindAll().Single();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(savedUser.UserName, Is.EqualTo(user.UserName));
 		}
 
@@ -50,7 +51,7 @@
 		[Test]
 		public void FindById_SavedUser_ReturnsUser()
 		{
-			var userId = ObjectId.GenerateNewId().ToString();
+			var userId = Guid.NewGuid().ToString();
 			var user = new IdentityUser {UserName = "name"};
 			user.SetId(userId);
 			var manager = GetUserManager();
@@ -67,7 +68,7 @@
 		{
 			var manager = GetUserManager();
 
-			var foundUser = manager.FindById(ObjectId.GenerateNewId().ToString());
+			var foundUser = manager.FindById(Guid.NewGuid().ToString());
 
 			Expect(foundUser, Is.Null);
 		}
@@ -78,11 +79,11 @@
 			var user = new IdentityUser {UserName = "name"};
 			var manager = GetUserManager();
 			manager.Create(user);
-			Expect(Users.FindAll(), Is.Not.Empty);
+			Expect(DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).AsEnumerable(), Is.Not.Empty);
 
 			manager.Delete(user);
 
-			Expect(Users.FindAll(), Is.Empty);
+			Expect(DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).AsEnumerable(), Is.Empty);
 		}
 
 		[Test]
@@ -96,7 +97,7 @@
 
 			manager.Update(savedUser);
 
-			var changedUser = Users.FindAll().Single();
+			var changedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(changedUser, Is.Not.Null);
 			Expect(changedUser.UserName, Is.EqualTo("newname"));
 		}

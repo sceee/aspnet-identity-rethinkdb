@@ -1,9 +1,10 @@
 ﻿namespace IntegrationTests
 {
 	using System.Linq;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
 	using NUnit.Framework;
+	using RethinkDb;
 
 	[TestFixture]
 	public class EnsureWeCanExtendIdentityUserTests : UserIntegrationTestsBase
@@ -19,7 +20,7 @@
 		[SetUp]
 		public void BeforeEachTestAfterBase()
 		{
-			var context = new IdentityContext(Users);
+			var context = new IdentityContext(DatabaseConnection, DB);
 			var userStore = new UserStore<ExtendedIdentityUser>(context);
 			_Manager = new UserManager<ExtendedIdentityUser>(userStore);
 			_User = new ExtendedIdentityUser
@@ -35,7 +36,7 @@
 
 			_Manager.Create(_User);
 
-			var savedUser = Users.FindAllAs<ExtendedIdentityUser>().Single();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<ExtendedIdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(savedUser.ExtendedField, Is.EqualTo("extendedField"));
 		}
 

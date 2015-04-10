@@ -18,9 +18,9 @@
 			return new ApplicationIdentityContext(users, roles);
 		 */
 
-		public IdentityContext()
-		{
-		}
+		//public IdentityContext()
+		//{
+		//}
 
 		public IdentityContext(IConnection conn, IDatabaseQuery db)
 		{

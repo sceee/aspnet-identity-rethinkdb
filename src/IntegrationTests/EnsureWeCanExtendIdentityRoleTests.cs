@@ -1,9 +1,10 @@
 ﻿namespace IntegrationTests
 {
 	using System.Linq;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
 	using NUnit.Framework;
+	using RethinkDb;
 
 	[TestFixture]
 	public class EnsureWeCanExtendIdentityRoleTests : UserIntegrationTestsBase
@@ -19,7 +20,7 @@
 		[SetUp]
 		public void BeforeEachTestAfterBase()
 		{
-			var context = new IdentityContext(Users, Roles);
+			var context = new IdentityContext(DatabaseConnection, DB);
 			var roleStore = new RoleStore<ExtendedIdentityRole>(context);
 			_Manager = new RoleManager<ExtendedIdentityRole>(roleStore);
 			_Role = new ExtendedIdentityRole
@@ -35,7 +36,7 @@
 
 			_Manager.Create(_Role);
 
-			var savedRole = Roles.FindAllAs<ExtendedIdentityRole>().Single();
+			var savedRole = DatabaseConnection.Run(IdentityContext.DB.Table<ExtendedIdentityRole>("IdentityRoles")).FirstOrDefault();
 			Expect(savedRole.ExtendedField, Is.EqualTo("extendedField"));
 		}
 

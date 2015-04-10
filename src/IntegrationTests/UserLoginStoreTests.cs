@@ -1,9 +1,10 @@
 ﻿namespace IntegrationTests
 {
 	using System.Linq;
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using Microsoft.AspNet.Identity;
 	using NUnit.Framework;
+	using RethinkDb;
 
 	[TestFixture]
 	public class UserLoginStoreTests : UserIntegrationTestsBase
@@ -18,7 +19,7 @@
 
 			manager.AddLogin(user.Id, login);
 
-			var savedLogin = Users.FindAll().Single().Logins.Single();
+			var savedLogin = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityRoles")).FirstOrDefault().Logins.Single();
 			Expect(savedLogin.LoginProvider, Is.EqualTo("provider"));
 			Expect(savedLogin.ProviderKey, Is.EqualTo("key"));
 		}
@@ -35,7 +36,7 @@
 
 			manager.RemoveLogin(user.Id, login);
 
-			var savedUser = Users.FindAll().Single();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityRoles")).FirstOrDefault();
 			Expect(savedUser.Logins, Is.Empty);
 		}
 

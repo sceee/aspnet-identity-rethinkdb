@@ -1,6 +1,6 @@
 ﻿namespace Tests
 {
-	using AspNet.Identity.MongoDB;
+	using AspNet.Identity.RethinkDB;
 	using MongoDB.Bson;
 	using NUnit.Framework;
 
@@ -23,7 +23,7 @@
 		{
 			var role = new IdentityRole();
 
-			var parsed = role.Id.SafeParseObjectId();
+			var parsed = role.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
 			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
 		}
@@ -43,7 +43,7 @@
 		{
 			var role = new IdentityRole("admin");
 
-			var parsed = role.Id.SafeParseObjectId();
+			var parsed = role.Id.SafeParseGuid();
 			Expect(parsed, Is.Not.Null);
 			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
 		}
