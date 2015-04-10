@@ -1,7 +1,7 @@
 require 'albacore'
 
 msbuild :msbuild  do |msb|
-  msb.solution = 'src/AspNet.Identity.MongoDB.sln'
+  msb.solution = 'src/AspNet.Identity.RethinkDB.sln'
   msb.properties = { :configuration => :Release }
   msb.targets = [ :Clean, :Build ]
 end
@@ -19,5 +19,5 @@ end
 task :all_tests => [:tests, :integration_tests]
 
 task :package => [:all_tests] do
-	sh 'src/.nuget/nuget.exe pack src/AspNet.Identity.MongoDB/AspNet.Identity.MongoDB.csproj'
+	sh 'src/.nuget/nuget.exe pack src/AspNet.Identity.RethinkDB/AspNet.Identity.RethinkDB.csproj'
 end

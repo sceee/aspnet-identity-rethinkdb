@@ -1,4 +1,4 @@
-AspNet.Identity.Mongo
+AspNet.Identity.RethinkDB
 =====================
 
 Code is based on the mongodb provider for Asp.Net Identity Framework by g0t4 ( https://github.com/g0t4/aspnet-identity-mongo ). Thanks for his code.
@@ -43,14 +43,14 @@ I'm using the albacore project with rake.
 To build:
 
 	rake msbuild
-	
+
 To test:
 
 	rake tests
 	rake integration_tests
 
 To package:
-	
+
 	rake package
 
 ## Documentation

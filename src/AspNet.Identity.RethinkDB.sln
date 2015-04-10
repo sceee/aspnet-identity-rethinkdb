@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNet.Identity.MongoDB", "AspNet.Identity.MongoDB\AspNet.Identity.MongoDB.csproj", "{AD64128A-6855-49F7-A846-1FCDAD368C55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNet.Identity.RethinkDB", "AspNet.Identity.RethinkDB\AspNet.Identity.RethinkDB.csproj", "{AD64128A-6855-49F7-A846-1FCDAD368C55}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AB638C09-B39E-4D06-B59D-C0626D8F188A}"
 	ProjectSection(SolutionItems) = preProject
