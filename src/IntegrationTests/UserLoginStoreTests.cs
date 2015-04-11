@@ -19,7 +19,7 @@
 
 			manager.AddLogin(user.Id, login);
 
-			var savedLogin = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityRoles")).FirstOrDefault().Logins.Single();
+			var savedLogin = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault().Logins.Single();
 			Expect(savedLogin.LoginProvider, Is.EqualTo("provider"));
 			Expect(savedLogin.ProviderKey, Is.EqualTo("key"));
 		}
@@ -36,7 +36,7 @@
 
 			manager.RemoveLogin(user.Id, login);
 
-			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityRoles")).FirstOrDefault();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(savedUser.Logins, Is.Empty);
 		}
 

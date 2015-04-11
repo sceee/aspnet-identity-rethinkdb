@@ -10,6 +10,8 @@
 	//using global::MongoDB.Driver.Linq;
 	using Microsoft.AspNet.Identity;
 	using global::RethinkDb;
+	using global::RethinkDb.DatumConverters;
+	using global::RethinkDb.Expressions;
 
 	public class UserStore<TUser> : IUserStore<TUser>,
 		IUserPasswordStore<TUser>,
@@ -26,6 +28,14 @@
 	{
 		private readonly IdentityContext _Context;
 		private readonly ITableQuery<TUser> TableUsers;
+
+	//	public static QueryConverter Converter = new QueryConverter(new AggregateDatumConverterFactory(
+	//PrimitiveDatumConverterFactory.Instance,
+	//TupleDatumConverterFactory.Instance,
+	//AnonymousTypeDatumConverterFactory.Instance,
+	//BoundEnumDatumConverterFactory.Instance,
+	//NullableDatumConverterFactory.Instance,
+	//NewtonsoftDatumConverterFactory.Instance), new DefaultExpressionConverterFactory());
 
 		public UserStore(IdentityContext context)
 		{

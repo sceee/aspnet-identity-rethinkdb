@@ -32,6 +32,10 @@
 
 			if (DatabaseConnection.Run(DB.TableList()).Contains("IdentityRoles"))
 				DatabaseConnection.Run(DB.TableDrop("IdentityRoles"));
+
+			// Create Tables
+			DatabaseConnection.Run(DB.TableCreate("IdentityUsers"));
+			DatabaseConnection.Run(DB.TableCreate("IdentityRoles"));
 		}
 
 		protected UserManager<IdentityUser> GetUserManager()

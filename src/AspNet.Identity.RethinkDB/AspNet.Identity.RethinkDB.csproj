@@ -40,11 +40,9 @@
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.666\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="RethinkDb">
-      <HintPath>..\packages\rethinkdb-net.0.9.1.0\lib\net45\RethinkDb.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IdentityContext.cs" />
+    <Compile Include="IdentityDatumConverterFactory.cs" />
     <Compile Include="IdentityRole.cs" />
     <Compile Include="IdentityUser.cs" />
     <Compile Include="IdentityUserClaim.cs" />
@@ -64,6 +63,12 @@
   <ItemGroup>
     <None Include="AspNet.Identity.RethinkDB.nuspec" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\rethinkdb-net\rethinkdb-net\rethinkdb-net.csproj">
+      <Project>{4632c7da-1c4f-4dab-b212-ef69059959c5}</Project>
+      <Name>rethinkdb-net</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

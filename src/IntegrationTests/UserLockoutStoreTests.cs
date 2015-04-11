@@ -24,7 +24,7 @@
 		[Test]
 		public void IncrementAccessFailedCount_ReturnsNewCount()
 		{
-			var store = new UserStore<IdentityUser>(null);
+			var store = new UserStore<IdentityUser>(IdentityContext);
 			var user = new IdentityUser {UserName = "bob"};
 
 			var count = store.IncrementAccessFailedCountAsync(user);

@@ -1,7 +1,9 @@
-﻿namespace AspNet.Identity.RethinkDB
-{
-	using System.Security.Claims;
+﻿using System.Runtime.Serialization;
+using System.Security.Claims;
 
+namespace AspNet.Identity.RethinkDB
+{
+	[DataContract]
 	public class IdentityUserClaim
 	{
 		public IdentityUserClaim()
@@ -14,7 +16,10 @@
 			Value = claim.Value;
 		}
 
+		[DataMember]
 		public string Type { get; set; }
+
+		[DataMember]
 		public string Value { get; set; }
 
 		public Claim ToSecurityClaim()

@@ -30,7 +30,7 @@
 
 			manager.AddToRole(user.Id, "role");
 
-			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUser")).FirstOrDefault();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(savedUser.Roles, Is.EquivalentTo(new[] {"role"}));
 			Expect(manager.IsInRole(user.Id, "role"), Is.True);
 		}
@@ -45,7 +45,7 @@
 
 			manager.RemoveFromRole(user.Id, "role");
 
-			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUser")).FirstOrDefault();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(savedUser.Roles, Is.Empty);
 			Expect(manager.IsInRole(user.Id, "role"), Is.False);
 		}

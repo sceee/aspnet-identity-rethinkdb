@@ -1,19 +1,22 @@
-﻿namespace IntegrationTests
-{
-	using System.Linq;
-	using AspNet.Identity.RethinkDB;
-	using Microsoft.AspNet.Identity;
-	using NUnit.Framework;
-	using RethinkDb;
+﻿using System.Linq;
+using System.Runtime.Serialization;
+using AspNet.Identity.RethinkDB;
+using Microsoft.AspNet.Identity;
+using NUnit.Framework;
+using RethinkDb;
 
+namespace IntegrationTests
+{
 	[TestFixture]
 	public class EnsureWeCanExtendIdentityRoleTests : UserIntegrationTestsBase
 	{
 		private RoleManager<ExtendedIdentityRole> _Manager;
 		private ExtendedIdentityRole _Role;
 
+		[DataContract]
 		public class ExtendedIdentityRole : IdentityRole
 		{
+			[DataMember]
 			public string ExtendedField { get; set; }
 		}
 

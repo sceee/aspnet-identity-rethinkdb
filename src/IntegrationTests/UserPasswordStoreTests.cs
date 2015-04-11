@@ -44,7 +44,7 @@
 
 			manager.RemovePassword(user.Id);
 
-			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUser")).FirstOrDefault();
+			var savedUser = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault();
 			Expect(savedUser.PasswordHash, Is.Null);
 		}
 	}

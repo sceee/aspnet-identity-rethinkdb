@@ -45,11 +45,9 @@
     <Reference Include="ReflectionMagic">
       <HintPath>..\packages\ReflectionMagic.2.0.0\lib\net40\ReflectionMagic.dll</HintPath>
     </Reference>
-    <Reference Include="RethinkDb">
-      <HintPath>..\packages\rethinkdb-net.0.9.1.0\lib\net45\RethinkDb.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,6 +80,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\rethinkdb-net\rethinkdb-net\rethinkdb-net.csproj">
+      <Project>{4632c7da-1c4f-4dab-b212-ef69059959c5}</Project>
+      <Name>rethinkdb-net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AspNet.Identity.RethinkDB\AspNet.Identity.RethinkDB.csproj">
       <Project>{AD64128A-6855-49F7-A846-1FCDAD368C55}</Project>
       <Name>AspNet.Identity.MongoDB</Name>
