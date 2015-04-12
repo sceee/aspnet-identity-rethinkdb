@@ -18,7 +18,6 @@ namespace AspNet.Identity.RethinkDB
 			Claims = new List<IdentityUserClaim>();
 		}
 
-		// TODO: Make private set. But: if that is private set, an Exception in RethinkDB-driver DataContractDatumConverterFactory occurs.
 		private string id;
 
 		[DataMember(Name = "id")]
@@ -31,6 +30,8 @@ namespace AspNet.Identity.RethinkDB
 
 			set
 			{
+				// TODO: Make private set. But: if that is private set, an Exception in RethinkDB-driver DataContractDatumConverterFactory occurs.
+
 				if (value != null)
 					id = value;
 			}
@@ -86,19 +87,15 @@ namespace AspNet.Identity.RethinkDB
 		{
 			get
 			{
-				return LoginsWrapper.Select(l => l.UserLoginInfo).ToList(); // <UserLoginInfoWrapper, UserLoginInfo>(l => l.userLoginInfo);
-
-				//List<UserLoginInfo> loginInfoList = new List<UserLoginInfo>();
-
-				//foreach (UserLoginInfoWrapper currentWrapper in LoginsWrapper)
-				//{
-				//	loginInfoList.Add(new UserLoginInfo(currentWrapper.LoginProvider, currentWrapper.ProviderKey));
-				//}
-
-				//return loginInfoList;
+				return LoginsWrapper.Select(l => l.UserLoginInfo).ToList();
 			}
 		}
 
+		/// <summary>
+		/// This wraps the Logins property because UserLoginInfo is sealed and cannot be changed. But we need to decorate that class with DataContract and DataMember.
+		/// TODO: Possibly there is a more elegant solution that could be used for this.
+		/// TODO: Also this should not be visible outside this lib (not public). But this collides with the need for auto serialization/deserialization.
+		/// </summary>
 		[DataMember(Name = "Logins")]
 		public List<UserLoginInfoWrapper> LoginsWrapper { get; set; }
 

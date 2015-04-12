@@ -5,9 +5,6 @@
 	using System.Linq;
 	using System.Security.Claims;
 	using System.Threading.Tasks;
-	//using global::MongoDB.Bson;
-	//using global::MongoDB.Driver.Builders;
-	//using global::MongoDB.Driver.Linq;
 	using Microsoft.AspNet.Identity;
 	using global::RethinkDb;
 	using global::RethinkDb.DatumConverters;
@@ -37,7 +34,7 @@
 
 		public virtual void Dispose()
 		{
-			// no need to dispose of anything, mongodb handles connection pooling automatically
+
 		}
 
 		public virtual Task CreateAsync(TUser user)
@@ -216,8 +213,7 @@
 		public virtual Task SetTwoFactorEnabledAsync(TUser user, bool enabled)
 		{
 			user.TwoFactorEnabled = enabled;
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Update(u => user)));
-			//return Task.FromResult(0);
+			return Task.FromResult(0);
 		}
 
 		public virtual Task<bool> GetTwoFactorEnabledAsync(TUser user)
