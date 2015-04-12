@@ -14,14 +14,14 @@ namespace AspNet.Identity.RethinkDB
 		{
 			Id = Guid.NewGuid().ToString("N");
 			Roles = new List<string>();
-			Logins = new List<UserLoginInfo>();
+			LoginsWrapper = new List<UserLoginInfoWrapper>();
 			Claims = new List<IdentityUserClaim>();
 		}
 
 		// TODO: Make private set. But: if that is private set, an Exception in RethinkDB-driver DataContractDatumConverterFactory occurs.
 		private string id;
 
-		[DataMember]
+		[DataMember(Name = "id")]
 		public string Id
 		{
 			get
@@ -82,21 +82,39 @@ namespace AspNet.Identity.RethinkDB
 		[DataMember]
 		public virtual string PasswordHash { get; set; }
 
-		//[DataMember]
-		public List<UserLoginInfo> Logins { get; set; }
+		public List<UserLoginInfo> Logins
+		{
+			get
+			{
+				return LoginsWrapper.Select(l => l.UserLoginInfo).ToList(); // <UserLoginInfoWrapper, UserLoginInfo>(l => l.userLoginInfo);
+
+				//List<UserLoginInfo> loginInfoList = new List<UserLoginInfo>();
+
+				//foreach (UserLoginInfoWrapper currentWrapper in LoginsWrapper)
+				//{
+				//	loginInfoList.Add(new UserLoginInfo(currentWrapper.LoginProvider, currentWrapper.ProviderKey));
+				//}
+
+				//return loginInfoList;
+			}
+		}
+
+		[DataMember(Name = "Logins")]
+		public List<UserLoginInfoWrapper> LoginsWrapper { get; set; }
 
 		public virtual void AddLogin(UserLoginInfo login)
 		{
-			Logins.Add(login);
+			LoginsWrapper.Add(new UserLoginInfoWrapper(login.LoginProvider, login.ProviderKey));
+			//Logins.Add(login);
 		}
 
 		public virtual void RemoveLogin(UserLoginInfo login)
 		{
-			var loginsToRemove = Logins
+			var loginsToRemove = LoginsWrapper
 				.Where(l => l.LoginProvider == login.LoginProvider)
 				.Where(l => l.ProviderKey == login.ProviderKey);
 
-			Logins = Logins.Except(loginsToRemove).ToList();
+			LoginsWrapper = LoginsWrapper.Except(loginsToRemove).ToList();
 		}
 
 		public virtual bool HasPassword()
@@ -104,6 +122,7 @@ namespace AspNet.Identity.RethinkDB
 			return false;
 		}
 
+		[DataMember]
 		public List<IdentityUserClaim> Claims { get; set; }
 
 		public virtual void AddClaim(Claim claim)

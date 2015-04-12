@@ -19,7 +19,7 @@
 
 			manager.AddLogin(user.Id, login);
 
-			var savedLogin = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers")).FirstOrDefault().Logins.Single();
+			var savedLogin = DatabaseConnection.Run(IdentityContext.DB.Table<IdentityUser>("IdentityUsers").Get(user.Id)).Logins.Single();
 			Expect(savedLogin.LoginProvider, Is.EqualTo("provider"));
 			Expect(savedLogin.ProviderKey, Is.EqualTo("key"));
 		}

@@ -29,14 +29,6 @@
 		private readonly IdentityContext _Context;
 		private readonly ITableQuery<TUser> TableUsers;
 
-	//	public static QueryConverter Converter = new QueryConverter(new AggregateDatumConverterFactory(
-	//PrimitiveDatumConverterFactory.Instance,
-	//TupleDatumConverterFactory.Instance,
-	//AnonymousTypeDatumConverterFactory.Instance,
-	//BoundEnumDatumConverterFactory.Instance,
-	//NullableDatumConverterFactory.Instance,
-	//NewtonsoftDatumConverterFactory.Instance), new DefaultExpressionConverterFactory());
-
 		public UserStore(IdentityContext context)
 		{
 			_Context = context;
@@ -61,12 +53,12 @@
 
 		public virtual Task DeleteAsync(TUser user)
 		{
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Select(u => u.Id == user.Id).Delete()));
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Get(user.Id).Delete()));
 		}
 
 		public virtual Task<TUser> FindByIdAsync(string userId)
 		{
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.Id == userId)).FirstOrDefault());
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Get(userId)));
 		}
 
 		public virtual Task<TUser> FindByNameAsync(string userName)
@@ -116,6 +108,7 @@
 		public virtual Task AddLoginAsync(TUser user, UserLoginInfo login)
 		{
 			user.AddLogin(login);
+
 			return Task.FromResult(0);
 		}
 
@@ -132,7 +125,8 @@
 
 		public virtual Task<TUser> FindAsync(UserLoginInfo login)
 		{
-			return Task.Factory.StartNew(() => Users.FirstOrDefault(u => u.Logins.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)));
+ 			return Task.Factory.StartNew(() => _Context.Connection.Run(TableUsers.Filter(u => u.LoginsWrapper.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey))).FirstOrDefault());
+			// Users.FirstOrDefault(u => u.Logins.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)));
 		}
 
 		public virtual Task SetSecurityStampAsync(TUser user, string stamp)
@@ -222,7 +216,8 @@
 		public virtual Task SetTwoFactorEnabledAsync(TUser user, bool enabled)
 		{
 			user.TwoFactorEnabled = enabled;
-			return Task.FromResult(0);
+			return Task.Run(() => _Context.Connection.Run(TableUsers.Update(u => user)));
+			//return Task.FromResult(0);
 		}
 
 		public virtual Task<bool> GetTwoFactorEnabledAsync(TUser user)

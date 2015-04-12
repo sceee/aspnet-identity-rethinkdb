@@ -19,7 +19,7 @@ namespace AspNet.Identity.RethinkDB
 		}
 
 		// TODO: Make private set. But: if that is private set, an Exception in RethinkDB-driver DataContractDatumConverterFactory occurs.
-		[DataMember]
+		[DataMember(Name = "id")]
 		public string Id { get; set; }
 
 		[DataMember]

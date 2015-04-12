@@ -51,7 +51,7 @@
 
 		public virtual Task DeleteAsync(TRole role)
 		{
-			return Task.Run(() => _Context.Connection.Run(TableRoles.Select(r => r.Id == role.Id).Delete()));
+			return Task.Run(() => _Context.Connection.Run(TableRoles.Get(role.Id).Delete())); // Select(r => r.Id == role.Id).Delete()));
 		}
 
 		public virtual Task<TRole> FindByIdAsync(string roleId)
