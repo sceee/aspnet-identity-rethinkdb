@@ -192,7 +192,6 @@ public class ApplicationUserManager : UserManager<ApplicationUser>
 		return await UpdateAsync(user).ConfigureAwait(false);
 	}
 }
-```
 
 // In your ASP.net application, you should have a Startup.Auth.cs file containing a partial class Startup:
 
@@ -253,13 +252,15 @@ public partial class Startup
 				//});
 		}
 }
-
+```
+#NOTIMPLEMENTEDYET
 	// at some point in application startup it would be good to ensure unique indexes on user and role names exist, these used to be a part of IdentityContext, but that caused issues for people that didn't want the indexes created at the time the IdentityContext is created. They're now just part of the static IndexChecks:
 
 	IndexChecks.EnsureUniqueIndexOnUserName(users);
 	IndexChecks.EnsureUniqueIndexOnEmail(users);
 
 	IndexChecks.EnsureUniqueIndexOnRoleName(roles);
+
 
 
 I will provide a complete sample in the future which may be based on the [Microsoft ASP.NET Identity Samples](http://www.nuget.org/packages/Microsoft.AspNet.Identity.Samples).
