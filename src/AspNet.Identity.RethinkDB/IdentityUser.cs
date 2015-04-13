@@ -12,7 +12,7 @@ namespace AspNet.Identity.RethinkDB
 	{
 		public IdentityUser()
 		{
-			Id = Guid.NewGuid().ToString("N");
+			Id = Guid.NewGuid().ToString();
 			Roles = new List<string>();
 			LoginsWrapper = new List<UserLoginInfoWrapper>();
 			Claims = new List<IdentityUserClaim>();

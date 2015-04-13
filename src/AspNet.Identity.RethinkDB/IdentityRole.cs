@@ -9,7 +9,7 @@ namespace AspNet.Identity.RethinkDB
 	{
 		public IdentityRole()
 		{
-			Id = Guid.NewGuid().ToString("N");
+			Id = Guid.NewGuid().ToString();
 		}
 
 		public IdentityRole(string roleName)
