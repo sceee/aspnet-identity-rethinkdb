@@ -2,11 +2,13 @@
 {
 	using System;
 	using global::RethinkDb;
+	using RethinkDb.Driver.Ast;
+	using RethinkDb.Driver.Net;
 
 	public class IdentityContext
 	{
 		public IConnection Connection { get; private set; }
-		public IDatabaseQuery DB { get; private set; }
+		public Db DB { get; private set; }
 		//public ITableQuery<TUser> Users { get; set; }
 		//public ITableQuery<TRole> Roles { get; set; }
 
@@ -22,7 +24,7 @@
 		//{
 		//}
 
-		public IdentityContext(IConnection conn, IDatabaseQuery db)
+		public IdentityContext(IConnection conn, Db db)
 		{
 			Connection = conn;
 			DB = db;

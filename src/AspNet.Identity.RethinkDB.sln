@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNet.Identity.RethinkDB", "AspNet.Identity.RethinkDB\AspNet.Identity.RethinkDB.csproj", "{AD64128A-6855-49F7-A846-1FCDAD368C55}"
 EndProject
@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rethinkdb-net", "..\..\..\Libraries\rethinkdb-net\rethinkdb-net\rethinkdb-net.csproj", "{4632C7DA-1C4F-4DAB-B212-EF69059959C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApplication", "SampleApplication\SampleApplication.csproj", "{1970DED4-8B44-4D39-899E-DDE1C854258C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,13 +35,16 @@ Global
 		{62483144-11D8-4ECE-990D-17B4716AFF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62483144-11D8-4ECE-990D-17B4716AFF69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2817B6BF-006D-415D-8CAB-34E14DCCBC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2817B6BF-006D-415D-8CAB-34E14DCCBC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2817B6BF-006D-415D-8CAB-34E14DCCBC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2817B6BF-006D-415D-8CAB-34E14DCCBC3C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4632C7DA-1C4F-4DAB-B212-EF69059959C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4632C7DA-1C4F-4DAB-B212-EF69059959C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4632C7DA-1C4F-4DAB-B212-EF69059959C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4632C7DA-1C4F-4DAB-B212-EF69059959C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1970DED4-8B44-4D39-899E-DDE1C854258C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1970DED4-8B44-4D39-899E-DDE1C854258C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1970DED4-8B44-4D39-899E-DDE1C854258C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1970DED4-8B44-4D39-899E-DDE1C854258C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

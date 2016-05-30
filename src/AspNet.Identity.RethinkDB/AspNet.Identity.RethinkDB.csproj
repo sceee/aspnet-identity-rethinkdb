@@ -64,12 +64,6 @@
     <None Include="AspNet.Identity.RethinkDB.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Libraries\rethinkdb-net\rethinkdb-net\rethinkdb-net.csproj">
-      <Project>{4632c7da-1c4f-4dab-b212-ef69059959c5}</Project>
-      <Name>rethinkdb-net</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

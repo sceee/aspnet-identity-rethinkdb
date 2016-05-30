@@ -6,9 +6,7 @@
 	using System.Security.Claims;
 	using System.Threading.Tasks;
 	using Microsoft.AspNet.Identity;
-	using global::RethinkDb;
-	using global::RethinkDb.DatumConverters;
-	using global::RethinkDb.Expressions;
+	using RethinkDb.Driver.Ast;
 
 	public class UserStore<TUser> : IUserStore<TUser>,
 		IUserPasswordStore<TUser>,
@@ -24,12 +22,12 @@
 		where TUser : IdentityUser
 	{
 		private readonly IdentityContext _Context;
-		private readonly ITableQuery<TUser> TableUsers;
+		private readonly Table TableUsers;
 
 		public UserStore(IdentityContext context)
 		{
 			_Context = context;
-			TableUsers = _Context.DB.Table<TUser>("IdentityUsers");
+			TableUsers = _Context.DB.Table("IdentityUsers");
 		}
 
 		public virtual void Dispose()
@@ -39,29 +37,29 @@
 
 		public virtual Task CreateAsync(TUser user)
 		{
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Insert(user)));
+			return Task.Run(() => TableUsers.Insert(user).Run(_Context.Connection)); // _Context.Connection.Run(TableUsers.Insert(user)));
 		}
 
 		public virtual Task UpdateAsync(TUser user)
 		{
 			// todo should add an optimistic concurrency check
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Insert(user, Conflict.Replace)));
+			return Task.Run(() => TableUsers.Update(user).Run(_Context.Connection)); // _Context.Connection.Run(TableUsers.Insert(user, Conflict.Replace)));
 		}
 
 		public virtual Task DeleteAsync(TUser user)
 		{
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Get(user.Id).Delete()));
+			return Task.Run(() => TableUsers.Get(user.Id).Delete().Run(_Context.Connection)); // _Context.Connection.Run(TableUsers.Get(user.Id).Delete()));
 		}
 
 		public virtual Task<TUser> FindByIdAsync(string userId)
 		{
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Get(userId)));
+			return Task.Run(() => TableUsers.Get(userId).RunAtom<TUser>(_Context.Connection)); // _Context.Connection.Run(TableUsers.Get(userId)));
 		}
 
 		public virtual Task<TUser> FindByNameAsync(string userName)
 		{
 			// todo exception on duplicates? or better to enforce unique index to ensure this
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.UserName == userName)).FirstOrDefault());
+			return Task.Run(() => TableUsers.Filter(us => us["UserName"] == userName).RunCursor<TUser>(_Context.Connection).FirstOrDefault()); // _Context.Connection.Run(TableUsers.Filter(u => u.UserName == userName)).FirstOrDefault());
 		}
 
 		public virtual Task SetPasswordHashAsync(TUser user, string passwordHash)
@@ -94,7 +92,7 @@
 
 		public virtual Task<IList<string>> GetRolesAsync(TUser user)
 		{
-			return Task.FromResult((IList<string>) user.Roles);
+			return Task.FromResult((IList<string>)user.Roles);
 		}
 
 		public virtual Task<bool> IsInRoleAsync(TUser user, string roleName)
@@ -117,13 +115,15 @@
 
 		public virtual Task<IList<UserLoginInfo>> GetLoginsAsync(TUser user)
 		{
-			return Task.FromResult((IList<UserLoginInfo>) user.Logins);
+			return Task.FromResult((IList<UserLoginInfo>)user.Logins);
 		}
 
 		public virtual Task<TUser> FindAsync(UserLoginInfo login)
 		{
- 			return Task.Factory.StartNew(() => _Context.Connection.Run(TableUsers.Filter(u => u.LoginsWrapper.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey))).FirstOrDefault());
+			//return Task.Factory.StartNew(() => _Context.Connection.Run(TableUsers.Filter(u => u.LoginsWrapper.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey))).FirstOrDefault());
+			//return Task.Factory.StartNew(() => TableUsers.Filter(linfo => linfo["LoginProvider"] == login.LoginProvider && linfo["ProviderKey"] == login.ProviderKey).RunCursor<TUser>(_Context.Connection).FirstOrDefault()); // GetAll().RunCursor<TUser>(_Context.Connection).Any(u => u.LoginsWrapper.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey).FirstOrDefault()));
 			// Users.FirstOrDefault(u => u.Logins.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)));
+			return Task.Factory.StartNew(() => TableUsers.Filter(user => user["Logins"].Filter(linfo => linfo["LoginProvider"] == login.LoginProvider && linfo["ProviderKey"] == login.ProviderKey)).RunCursor<TUser>(_Context.Connection).FirstOrDefault()); // GetAll().RunCursor<TUser>(_Context.Connection).Any(u => u.LoginsWrapper.Any(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey).FirstOrDefault()));
 		}
 
 		public virtual Task SetSecurityStampAsync(TUser user, string stamp)
@@ -162,12 +162,13 @@
 		public virtual Task<TUser> FindByEmailAsync(string email)
 		{
 			// todo what if a user can have multiple accounts with the same email?
-			return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.Email == email)).FirstOrDefault());
+			//return Task.Run(() => _Context.Connection.Run(TableUsers.Filter(u => u.Email == email)).FirstOrDefault());
+			return Task.Run(() => TableUsers.Filter(u => u["Email"] == email).RunCursor<TUser>(_Context.Connection).FirstOrDefault());
 		}
 
 		public virtual Task<IList<Claim>> GetClaimsAsync(TUser user)
 		{
-			return Task.FromResult((IList<Claim>) user.Claims.Select(c => c.ToSecurityClaim()).ToList());
+			return Task.FromResult((IList<Claim>)user.Claims.Select(c => c.ToSecurityClaim()).ToList());
 		}
 
 		public virtual Task AddClaimAsync(TUser user, Claim claim)
@@ -185,7 +186,11 @@
 		public virtual IQueryable<TUser> Users
 		{
 			// TODO: Performance?!
-			get { return _Context.Connection.Run(TableUsers).AsQueryable<TUser>(); }
+			get
+			{
+				//return _Context.Connection.Run(TableUsers).AsQueryable<TUser>();
+				return TableUsers.RunCursor<TUser>(_Context.Connection).AsQueryable();
+			}
 		}
 
 		public virtual Task SetPhoneNumberAsync(TUser user, string phoneNumber)
