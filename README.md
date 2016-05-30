@@ -7,11 +7,12 @@ A rethinkdb provider for the ASP.NET Identity framework.
 This provider uses Rethinkdb.Driver (available as NuGet package or https://github.com/bchavez/RethinkDb.Driver).
 
 ## Usage
+An example based on the default Asp.net MVC example site is included in the src folder.
 
+
+Basically, it's:
 You will need to create a database connection and hand that over to the IdentityContext constructor.
 The following is a example implementation that uses the provider for the Asp.Net Identity Framework.
-
-An example based on the default Asp.net MVC example site is included in the src folder.
 
 
 ```C#
