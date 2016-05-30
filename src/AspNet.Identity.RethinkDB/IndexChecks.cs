@@ -1,9 +1,6 @@
 ﻿namespace AspNet.Identity.RethinkDB
 {
 	using System;
-	//using global::MongoDB.Driver;
-	//using global::MongoDB.Driver.Builders;
-	using global::RethinkDb;
 
 	//public class IndexChecks
 	//{

@@ -1,7 +1,6 @@
 ﻿namespace AspNet.Identity.RethinkDB
 {
 	using System;
-	using global::RethinkDb;
 	using RethinkDb.Driver.Ast;
 	using RethinkDb.Driver.Net;
 

@@ -4,7 +4,6 @@
 	using AspNet.Identity.RethinkDB;
 	using NUnit.Framework;
 	using Tests;
-	using RethinkDb;
 
 	[TestFixture]
 	public class IdentityUserTests : UserIntegrationTestsBase
