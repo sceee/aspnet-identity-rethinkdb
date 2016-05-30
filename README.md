@@ -1,7 +1,9 @@
 AspNet.Identity.RethinkDB
 =====================
 
-A rethinkdb provider for the ASP.NET Identity framework. This project is currently in development stadium and not yet ready for production use.
+This project is currently in development stadium and not yet ready for production use.
+
+A rethinkdb provider for the ASP.NET Identity framework.
 This provider uses rethinkdb-net (available as NuGet package or https://github.com/mfenniak/rethinkdb-net).
 
 ## Usage
