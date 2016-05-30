@@ -4,37 +4,15 @@ AspNet.Identity.RethinkDB
 This project is currently in development stadium and not yet ready for production use.
 
 A rethinkdb provider for the ASP.NET Identity framework.
-This provider uses rethinkdb-net (available as NuGet package or https://github.com/mfenniak/rethinkdb-net).
+This provider uses Rethinkdb.Driver (available as NuGet package or https://github.com/bchavez/RethinkDb.Driver).
 
 ## Usage
 
 You will need to create a database connection and hand that over to the IdentityContext constructor.
 The following is a example implementation that uses the provider for the Asp.Net Identity Framework.
 
-In your Web.config, define the database connection as normal when using rethinkdb-net:
-```xml
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-		<configSections>
-				<section name="rethinkdb" type="RethinkDb.Configuration.RethinkDbClientSection, RethinkDb"/>
-		</configSections>
-		<rethinkdb>
-				<clusters>
-						<cluster name="dbcluster">
-								<defaultLogger enabled="true" category="Warning"/>
-								<connectionPool enabled="true"/>
-								<networkErrorHandling enabled="true" />
-								<endpoints>
-										<endpoint address="127.0.0.1" port="28015"/>
-								</endpoints>
-						</cluster>
-				</clusters>
-		</rethinkdb>
-		...
-		other configuration
-		...
-</configuration>
-```
+An example based on the default Asp.net MVC example site is included in the src folder.
+
 
 ```C#
 // Create class for ApplicationIdentityContext that derives from IdentityContext
